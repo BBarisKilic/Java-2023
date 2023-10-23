@@ -1,11 +1,11 @@
-package com.example.p21ntierarchitecture;
+package com.example.p21ntierarchitecture.Customer;
 
 import jakarta.persistence.*;
 
 import java.util.Objects;
 
 @Entity
-public class Customer {
+class Customer {
 
     @Id
     @SequenceGenerator(
@@ -22,7 +22,8 @@ public class Customer {
     private String email;
     private Integer age;
 
-    public Customer() {}
+    public Customer() {
+    }
 
     public Customer(Integer id, String name, String email, Integer age) {
         this.id = id;
