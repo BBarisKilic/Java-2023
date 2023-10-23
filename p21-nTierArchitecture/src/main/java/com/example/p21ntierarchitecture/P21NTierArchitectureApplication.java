@@ -2,10 +2,7 @@ package com.example.p21ntierarchitecture;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -32,7 +29,7 @@ public class P21NTierArchitectureApplication {
 
     public record NewCustomerRequest(String name, String email, Integer age) {}
 
-    @RequestMapping
+    @PostMapping
     public void addCustomer(@RequestBody NewCustomerRequest newCustomerRequest) {
         Customer customer = new Customer();
 
@@ -41,5 +38,10 @@ public class P21NTierArchitectureApplication {
         customer.setAge(newCustomerRequest.age());
 
         customerRepository.save(customer);
+    }
+
+    @DeleteMapping("{customerId}")
+    public void deleteCustomer(@PathVariable("customerId") Integer id) {
+        customerRepository.deleteById(id);
     }
 }
