@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @SpringBootApplication
 @RestController
@@ -30,12 +31,12 @@ public class P21NTierArchitectureApplication {
     public record NewCustomerRequest(String name, String email, Integer age) {}
 
     @PostMapping
-    public void addCustomer(@RequestBody NewCustomerRequest newCustomerRequest) {
-        Customer customer = new Customer();
+    public void addCustomer(@RequestBody NewCustomerRequest request) {
+        final Customer customer = new Customer();
 
-        customer.setName(newCustomerRequest.name());
-        customer.setEmail(newCustomerRequest.email());
-        customer.setAge(newCustomerRequest.age());
+        customer.setName(request.name());
+        customer.setEmail(request.email());
+        customer.setAge(request.age());
 
         customerRepository.save(customer);
     }
@@ -43,5 +44,20 @@ public class P21NTierArchitectureApplication {
     @DeleteMapping("{customerId}")
     public void deleteCustomer(@PathVariable("customerId") Integer id) {
         customerRepository.deleteById(id);
+    }
+
+    @PutMapping("{customerId}")
+    public void updateCustomer(@PathVariable("customerId") Integer id,
+                               @RequestBody NewCustomerRequest request) {
+        final Optional<Customer> customer = customerRepository.findById(id);
+
+        if (customer.isPresent()) {
+            customer.get().setName(request.name());
+            customer.get().setEmail(request.email());
+            customer.get().setAge(request.age());
+            customerRepository.save(customer.get());
+        }
+
+
     }
 }
